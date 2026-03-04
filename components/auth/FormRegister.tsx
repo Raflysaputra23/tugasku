@@ -23,7 +23,7 @@ const FormRegister = () => {
 
     useEffect(() => {
         if (state && state.success) {
-            router.push("/verifikasi");
+            router.push("/verifikasi-email");
         }
     }, [state, router]);
 

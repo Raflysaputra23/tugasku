@@ -5,7 +5,7 @@ import NavbarSection from "@/components/LandingPage/NavbarSection";
 export default async function Home() {
 
   return (
-    <div className="flex min-h-screen flex-col bg-background relative">
+    <div className="flex min-h-screen flex-col bg-background relative overflow-hidden">
       {/* ANIMATION */}
       <AnimationSection />
 
