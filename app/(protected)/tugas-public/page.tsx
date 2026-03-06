@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import TaskCard from '@/components/dashboard/TaskCard';
 import EmptyState from '@/components/dashboard/EmptyState';
 import { usePublicTasks, useTasks } from '@/hooks/useTasks';
-import { toast } from 'sonner';
 import { Task } from '@/lib/types';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -33,7 +32,6 @@ const PublicTasks = () => {
       source_task_id: task.id_task,
       status: 'pending',
     });
-    toast.success('Tugas berhasil diambil ke daftar pribadimu!');
   };
 
   return (
