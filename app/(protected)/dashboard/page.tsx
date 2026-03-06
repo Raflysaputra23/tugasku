@@ -28,13 +28,13 @@ const Dashboard = () => {
   }, [tasks]);
 
   const recentTasks = useMemo(
-    () => [...tasks].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5),
+    () => [...tasks].sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()).slice(0, 5),
     [tasks]
   );
 
   const handleSubmit = async (data: Partial<Task>) => {
     if (editingTask) {
-      await updateTask(editingTask.id, data);
+      await updateTask(editingTask.id_task, data);
     } else {
       await createTask(data);
     }
@@ -48,7 +48,7 @@ const Dashboard = () => {
           <h1 className="text-2xl font-display font-bold">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Ringkasan tugas kuliahmu</p>
         </div>
-        <Button className='cursor-pointer' onClick={() => { setEditingTask(null); setFormOpen(true); }}>
+        <Button variant={'primary'} className='cursor-pointer' onClick={() => { setEditingTask(null); setFormOpen(true); }}>
           <Plus className="mr-2 h-4 w-4" /> Buat Tugas
         </Button>
       </div>
@@ -75,10 +75,10 @@ const Dashboard = () => {
             onAction={() => setFormOpen(true)}
           />
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {recentTasks.map(task => (
               <TaskCard
-                key={task.id}
+                key={task.id_task}
                 task={task}
                 onEdit={t => { setEditingTask(t); setFormOpen(true); }}
                 onDelete={deleteTask}

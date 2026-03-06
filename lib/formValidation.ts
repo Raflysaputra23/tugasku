@@ -72,7 +72,7 @@ export const formRegisterValidation = async (
   const { namaLengkap, email, password } = validasi.data;
 
   try {
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -81,6 +81,15 @@ export const formRegisterValidation = async (
       },
     });
     if (error) throw error;
+
+    const { error: error2 } = await supabase.from("profiles").insert({
+      id_user: data?.user?.id,
+      nama_lengkap: namaLengkap,
+      email,
+      role: "user"
+    });
+
+    if (error2) throw error2;
 
     return {
       error: null,
@@ -95,6 +104,7 @@ export const formRegisterValidation = async (
         success: false,
       };
     } else {
+      console.log(error);
       return {
         error,
         message: "Ada kesalahan sistem!",

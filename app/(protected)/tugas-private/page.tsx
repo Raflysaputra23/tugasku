@@ -37,7 +37,7 @@ const TugasPrivate = () => {
 
         result.sort((a, b) => {
             if (sortBy === 'deadline') return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
         });
 
         return result;
@@ -45,7 +45,7 @@ const TugasPrivate = () => {
 
     const handleSubmit = async (data: Partial<Task>) => {
         if (editingTask) {
-            await updateTask(editingTask.id, data);
+            await updateTask(editingTask.id_task, data);
         } else {
             await createTask(data);
         }
@@ -59,7 +59,7 @@ const TugasPrivate = () => {
                     <h1 className="text-2xl font-display font-bold">Tugas Saya</h1>
                     <p className="text-sm text-muted-foreground">{tasks.length} tugas</p>
                 </div>
-                <Button onClick={() => { setEditingTask(null); setFormOpen(true); }}>
+                <Button variant={'primary'} onClick={() => { setEditingTask(null); setFormOpen(true); }}>
                     <Plus className="mr-2 h-4 w-4" /> Buat Tugas
                 </Button>
             </div>
@@ -101,10 +101,10 @@ const TugasPrivate = () => {
                     onAction={!search ? () => setFormOpen(true) : undefined}
                 />
             ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {filtered.map(task => (
                         <TaskCard
-                            key={task.id}
+                            key={task.id_task}
                             task={task}
                             onEdit={t => { setEditingTask(t); setFormOpen(true); }}
                             onDelete={deleteTask}

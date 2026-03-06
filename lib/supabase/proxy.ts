@@ -36,20 +36,20 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
   
   
-  const isLogin = ["/login", "/register"].includes(request.nextUrl.pathname);
-  const isLogout = ["/dashboard","/chat"].includes(request.nextUrl.pathname);
+  const isLogin = ["/login", "/register","/verifikasi-email"].includes(request.nextUrl.pathname);
+  const isLogout = ["/dashboard","/profile","/tugas-private","/tugas-public","/notifikasi"].includes(request.nextUrl.pathname);
 
-//   if (isLogout && !user) {
-//     const url = request.nextUrl.clone();
-//     url.pathname = "/login";
-//     return NextResponse.redirect(url);
-//   }
+  if (isLogout && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
-//   if (isLogin && user) {
-//     const url = request.nextUrl.clone();
-//     url.pathname = "/dashboard";
-//     return NextResponse.redirect(url);
-//   }
+  if (isLogin && user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }

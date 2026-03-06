@@ -36,11 +36,12 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
 
   return (
     <Card className={`hover:shadow-md transition-all group ${urgencyClass}`}>
-      <CardContent className="p-4">
+      <CardContent className="px-5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
+            <h3 className="font-display font-semibold text-lg truncate mb-2">{task.title}</h3>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <Badge variant={task.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
+              <Badge variant={task.status === 'completed' ? 'default' : 'secondary'} className="text-xs ">
                 {task.status === 'completed' ? 'Selesai' : 'Belum Selesai'}
               </Badge>
               <Badge variant="outline" className="text-xs">
@@ -49,7 +50,6 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
               {isOverdue && <Badge variant="destructive" className="text-xs">Terlambat</Badge>}
               {isUrgent && <Badge className="text-xs bg-warning text-warning-foreground">Mendesak</Badge>}
             </div>
-            <h3 className="font-display font-semibold text-base truncate">{task.title}</h3>
             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground flex-wrap">
               <span className="flex items-center gap-1">
                 <BookOpen className="h-3 w-3" />
@@ -100,7 +100,7 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
                 </DropdownMenuItem>
               )}
               {isOwner && onDelete && (
-                <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-destructive">
+                <DropdownMenuItem onClick={() => onDelete(task.id_task)} className="text-destructive">
                   <Trash2 className="mr-2 h-4 w-4" /> Hapus
                 </DropdownMenuItem>
               )}

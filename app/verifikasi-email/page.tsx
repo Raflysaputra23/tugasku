@@ -15,7 +15,7 @@ const VerifikasiEmail = async () => {
             {/* ANIMATION */}
             <AnimationSection />
 
-            <Card className="w-[96%] max-w-md animate-fade-in bg-card/70">
+            <Card className="w-[95%] max-w-md animate-fade-in bg-card/70">
                 <CardHeader className="text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 shadow-[1px_1px_5px_rgba(0,0,0,0.3)]">
                         <Clock8Icon className="h-6 w-6 text-accent animate-pulse" />

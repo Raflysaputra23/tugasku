@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { BookOpen, Calendar, CheckCircle2, FileText, Sparkles, Star } from "lucide-react";
+import { memo } from "react";
 
-const FloatingIcon = ({ children, className, delay = 0, duration = 6, x = 0, y = 20 }: {
+const FloatingIcon = memo(({ children, className, delay = 0, duration = 6, x = 0, y = 20 }: {
     children: React.ReactNode;
     className?: string;
     delay?: number;
@@ -27,9 +28,11 @@ const FloatingIcon = ({ children, className, delay = 0, duration = 6, x = 0, y =
     >
         {children}
     </motion.div>
-);
+));
 
-const GlowOrb = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
+FloatingIcon.displayName = "FloatingIcon";
+
+const GlowOrb = memo(({ className, delay = 0 }: { className?: string; delay?: number }) => (
     <motion.div
         className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
         animate={{
@@ -43,7 +46,9 @@ const GlowOrb = ({ className, delay = 0 }: { className?: string; delay?: number 
             delay,
         }}
     />
-);
+));
+
+GlowOrb.displayName = "GlowOrb";
 
 const AnimationSection = () => {
     return (
@@ -97,5 +102,6 @@ const AnimationSection = () => {
         </>
     )
 }
+
 
 export default AnimationSection;

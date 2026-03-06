@@ -18,13 +18,25 @@ const FormRegister = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
-    const [state, formAction]:any = useActionState(formRegisterValidation, null);
+    const [state, formAction]: any = useActionState(formRegisterValidation, null);
     const router = useRouter();
 
+    const resetForm = () => {
+        setNamaLengkap('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        setShowPassword(false)
+        setShowConfirmPassword(false)
+    }
+
     useEffect(() => {
-        if (state && state.success) {
-            router.push("/verifikasi-email");
-        }
+        (async () => {
+            if (state) {
+                resetForm();
+                if (state.success) router.push("/verifikasi-email");
+            }
+        })()
     }, [state, router]);
 
     return (

@@ -8,8 +8,13 @@ import { createClient } from "@/lib/supabase/client";
 interface Profile {
     id: string;
     user_id: string;
-    full_name: string | null;
+    nama_lengkap: string | null;
     avatar_url: string | null;
+    jurusan: string | null;
+    kelas: string | null;
+    bio: string | null;
+    role: string | null;
+    email: string | null;
 }
 
 interface AuthContextType {
@@ -21,7 +26,7 @@ interface AuthContextType {
     signIn: (email: string, password: string) => Promise<{ error: any }>;
     signOut: () => Promise<void>;
     signInWithGoogle: () => Promise<{ error: any }>;
-    // updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
+    updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,14 +39,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // const fetchProfile = async (userId: string) => {
-    //     const { data } = await supabase
-    //         .from("profiles")
-    //         .select("*")
-    //         .eq("user_id", userId)
-    //         .single();
-    //     setProfile(data as Profile | null);
-    // };
+    const fetchProfile = async (userId: string) => {
+        const { data } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id_user", userId)
+            .single();
+        setProfile(data as Profile | null);
+    };
 
 
     useEffect(() => {
@@ -49,7 +54,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             async (_event, session) => {
                 setSession(session);
                 setUser(session?.user ?? null);
-                setProfile(null);
                 setLoading(false);
             }
         );
@@ -62,6 +66,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         return () => subscription.unsubscribe();
     }, []);
+
+    useEffect(() => {
+        (async() => {
+            if (user) await fetchProfile(user.id);
+        })()
+    }, [user]);
 
     const signUp = async (email: string, password: string, fullName: string) => {
         const { error } = await supabase.auth.signUp({
@@ -95,18 +105,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setProfile(null);
     };
 
-    // const updateProfile = async (updates: Partial<Profile>) => {
-    //     if (!user) return { error: "Not authenticated" };
-    //     const { error } = await supabase
-    //         .from("profiles")
-    //         .update(updates)
-    //         .eq("user_id", user.id);
-    //     if (!error) await fetchProfile(user.id);
-    //     return { error };
-    // };
+    const updateProfile = async (updates: Partial<Profile>) => {
+        if (!user) return { error: "Not authenticated" };
+        const { error } = await supabase
+            .from("profiles")
+            .update(updates)
+            .eq("id_user", user.id);
+        if (!error) await fetchProfile(user.id);
+        return { error };
+    };
 
     return (
-        <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, signInWithGoogle }}>
+        <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, signInWithGoogle, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );

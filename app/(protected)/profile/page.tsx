@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ListTodo, Globe, Copy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,12 +14,13 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   const { tasks } = useTasks();
-  const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
-  const [major, setMajor] = useState('');
-  const [className, setClassName] = useState('');
-  const [bio, setBio] = useState('');
+  const [fullName, setFullName] = useState(profile?.nama_lengkap || '');
+  const [major, setMajor] = useState(profile?.jurusan || '');
+  const [className, setClassName] = useState(profile?.kelas || '');
+  const [bio, setBio] = useState(profile?.bio || '');
+  const [disableSave, setDisableSave] = useState(true);
 
   const stats = useMemo(() => {
     const privateTasks = tasks.filter(t => t.visibility === 'private' && !t.source_task_id).length;
@@ -29,8 +30,19 @@ const Profile = () => {
   }, [tasks]);
 
   const handleSave = () => {
-    toast.success('Profil berhasil disimpan!');
+    updateProfile({ nama_lengkap: fullName, jurusan: major, kelas: className, bio: bio });
+    setDisableSave(true);
   };
+
+  useEffect(() => {
+    (async() => {
+      if(fullName != profile?.nama_lengkap || major != profile?.jurusan || className != profile?.kelas || bio != profile?.bio) {
+        setDisableSave(false);
+      } else {
+        setDisableSave(true);
+      }
+    })()
+  }, [fullName, major, className, bio]);
 
   const initials = fullName
     ? fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
@@ -49,7 +61,7 @@ const Profile = () => {
         <StatCard title="Tugas Diambil" value={stats.takenTasks} icon={Copy} variant="success" />
       </div>
 
-      <Card>
+      <Card className='animate-[fade-in_0.7s_ease-in-out]'>
         <CardHeader>
           <CardTitle className="font-display">Informasi Profil</CardTitle>
         </CardHeader>
@@ -70,7 +82,7 @@ const Profile = () => {
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input value={user?.email || ''} disabled />
+              <Input value={profile?.email || ''} disabled />
             </div>
             <div className="space-y-2">
               <Label>Jurusan</Label>
@@ -83,9 +95,9 @@ const Profile = () => {
           </div>
           <div className="space-y-2">
             <Label>Bio</Label>
-            <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Ceritakan sedikit tentang dirimu..." rows={3} />
+            <Textarea value={bio} className='resize-none overflow-y-auto' onChange={e => setBio(e.target.value)} placeholder="Ceritakan sedikit tentang dirimu..." rows={3} />
           </div>
-          <Button onClick={handleSave}>Simpan Profil</Button>
+          <Button variant={'primary'} className='cursor-pointer' disabled={disableSave} onClick={handleSave}>Simpan Profil</Button>
         </CardContent>
       </Card>
     </div>

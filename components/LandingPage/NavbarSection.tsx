@@ -33,7 +33,7 @@ const Navbar = () => {
     if(loading) return <LoadingPage />
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center justify-between px-6 py-4 mb-6 ${scrolled && 'border-b backdrop-blur-2xl'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition duration-200 flex items-center justify-between px-6 py-4 mb-6 ${scrolled && 'border-b backdrop-blur-2xl'}`}>
             <div className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-accent" />
                 <span className="font-display font-bold text-lg">Tugasku</span>

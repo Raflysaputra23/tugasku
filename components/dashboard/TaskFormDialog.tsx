@@ -85,7 +85,7 @@ const TaskFormDialog = ({ open, onOpenChange, task, onSubmit }: TaskFormDialogPr
           </div>
           <div className="flex items-center justify-between">
             <Label>Tugas Publik</Label>
-            <Switch checked={form.visibility === 'public'} onCheckedChange={c => setForm(f => ({ ...f, visibility: c ? 'public' : 'private' }))} />
+            <Switch checked={form.visibility === 'public'} className='bg-red-500' onCheckedChange={c => setForm(f => ({ ...f, visibility: c ? 'public' : 'private' }))} />
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Batal</Button>

@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, Proportions } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface StatCardProps {
@@ -18,7 +18,7 @@ const variantStyles = {
 };
 
 const StatCard = ({ title, value, icon: Icon, description, variant = 'default' }: StatCardProps) => (
-  <Card className="hover:shadow-md transition-shadow">
+  <Card className="hover:shadow-md transition-shadow animate-[fade-in_0.5s_ease-in-out]">
     <CardContent className="flex items-center gap-4">
       <div className={`rounded-xl p-3 ${variantStyles[variant]}`}>
         <Icon className="h-5 w-5" />

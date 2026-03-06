@@ -20,7 +20,7 @@ const typeColors = {
 };
 
 const Notifications = () => {
-  const { tasks } = useTasks();
+  const { tasks, loading } = useTasks();
   const { notifications } = useNotifications(tasks);
 
   return (
@@ -30,31 +30,35 @@ const Notifications = () => {
         <p className="text-sm text-muted-foreground">Pengingat deadline tugas pribadimu</p>
       </div>
 
-      {notifications.length === 0 ? (
-        <EmptyState icon={Bell} title="Tidak ada notifikasi" description="Semua tugas pribadimu aman dari deadline yang mendesak!" />
-      ) : (
-        <div className="space-y-3">
-          {notifications.map(notif => {
-            const Icon = typeIcons[notif.type];
-            return (
-              <Card key={notif.id} className="animate-fade-in">
-                <CardContent className="flex items-center gap-4 p-4">
-                  <div className={`rounded-xl p-3 ${typeColors[notif.type]}`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm">{notif.message}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{notif.task_title}</p>
-                  </div>
-                  <Badge variant={notif.type === 'deadline_12h' ? 'destructive' : 'secondary'} className="text-xs">
-                    {notif.type === 'deadline_12h' ? '< 12 jam' : notif.type === 'deadline_1d' ? '< 1 hari' : '< 2 hari'}
-                  </Badge>
-                </CardContent>
-              </Card>
-            );
-          })}
+      {loading ?
+        <div className="flex justify-center py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
-      )}
+        : notifications.length === 0 ? (
+          <EmptyState icon={Bell} title="Tidak ada notifikasi" description="Semua tugas pribadimu aman dari deadline yang mendesak!" />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {notifications.map(notif => {
+              const Icon = typeIcons[notif.type];
+              return (
+                <Card key={notif.id} className="animate-fade-in">
+                  <CardContent className="flex items-center gap-4 p-4">
+                    <div className={`rounded-xl p-3 ${typeColors[notif.type]}`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm">{notif.message}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{notif.task_title}</p>
+                    </div>
+                    <Badge variant={notif.type === 'deadline_12h' ? 'destructive' : 'secondary'} className="text-xs">
+                      {notif.type === 'deadline_12h' ? '< 12 jam' : notif.type === 'deadline_1d' ? '< 1 hari' : '< 2 hari'}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
     </div>
   );
 };

@@ -25,11 +25,12 @@ const PublicTasks = () => {
     );
   }, [publicTasks, search]);
 
+
   const handleTake = async (task: Task) => {
     await createTask({
       ...task,
       visibility: 'private',
-      source_task_id: task.id,
+      source_task_id: task.id_task,
       status: 'pending',
     });
     toast.success('Tugas berhasil diambil ke daftar pribadimu!');
@@ -54,13 +55,13 @@ const PublicTasks = () => {
       ) : filtered.length === 0 ? (
         <EmptyState icon={Globe} title="Belum ada tugas publik" description="Tugas publik dari pengguna lain akan muncul di sini" />
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {filtered.map(task => (
             <TaskCard
-              key={task.id}
+              key={task.id_task}
               task={task}
-              isOwner={task.user_id === user?.id}
-              onTake={task.user_id !== user?.id ? handleTake : undefined}
+              isOwner={task.id_user === user?.id}
+              onTake={task.id_user !== user?.id ? handleTake : undefined}
             />
           ))}
         </div>

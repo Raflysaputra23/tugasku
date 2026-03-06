@@ -59,7 +59,8 @@
 
 @theme inline {
   --animate-logo-spin: logo-spin 1s linear infinite;
-  --animate-dots: dots 1s linear infinite;
+  --animate-dots: dots .5s linear infinite;
+  --animate-fade-in: fade-in 1s ease-in-out;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --font-poppins: var(--font-poppins);
@@ -196,5 +197,16 @@
   }
   to {
     background-color: var(--color-accent);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

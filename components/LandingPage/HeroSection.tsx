@@ -29,7 +29,7 @@ const HeroSection = () => {
                         { icon: Globe, title: 'Berbagi Publik', desc: 'Bagikan tugas dengan teman sekelas dan ambil tugas dari orang lain.' },
                         { icon: Bell, title: 'Notifikasi Cerdas', desc: 'Pengingat otomatis 2 hari, 1 hari, dan 12 jam sebelum deadline.' },
                     ].map((feature) => (
-                        <div key={feature.title} className="rounded-xl border bg-card p-5">
+                        <div key={feature.title} className="rounded-xl border bg-card p-5 hover:scale-105 transition-all">
                             <feature.icon className="h-5 w-5 text-accent mb-3" />
                             <h3 className="font-display font-semibold mb-1">{feature.title}</h3>
                             <p className="text-sm text-muted-foreground">{feature.desc}</p>

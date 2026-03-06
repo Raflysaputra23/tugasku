@@ -1,6 +1,6 @@
 export interface Task {
-  id: string;
-  user_id: string;
+  id_task: string;
+  id_user: string;
   subject: string;
   title: string;
   description: string;
@@ -11,8 +11,8 @@ export interface Task {
   file_url?: string;
   file_name?: string;
   source_task_id?: string; // if taken from public
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   // joined fields
   author_name?: string;
 }
