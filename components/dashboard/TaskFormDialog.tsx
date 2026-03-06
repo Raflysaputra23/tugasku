@@ -35,7 +35,7 @@ const TaskFormDialog = ({ open, onOpenChange, task, onSubmit }: TaskFormDialogPr
         title: task.title,
         description: task.description,
         class_name: task.class_name,
-        deadline: task.deadline ? new Date(task.deadline).toISOString().slice(0, 16) : '',
+        deadline: `${task.date}T${task.time}`,
         visibility: task.visibility,
       });
     } else {
@@ -47,7 +47,7 @@ const TaskFormDialog = ({ open, onOpenChange, task, onSubmit }: TaskFormDialogPr
     e.preventDefault();
     setLoading(true);
     try {
-      await onSubmit({ ...form, deadline: new Date(form.deadline).toISOString() });
+      await onSubmit({ ...form, time: form.deadline.split('T')[1], date: form.deadline.split('T')[0] });
       onOpenChange(false);
     } finally {
       setLoading(false);

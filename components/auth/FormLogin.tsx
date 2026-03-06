@@ -28,7 +28,7 @@ const FormLogin = () => {
         (async() => {
             if (state) {
                 resetForm();
-                if (state.success) router.push('/dashboard');
+                if (state.success) window.location.reload();
             }
         })()
     }, [state, router]);

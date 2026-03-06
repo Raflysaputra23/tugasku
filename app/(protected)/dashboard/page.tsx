@@ -21,7 +21,7 @@ const Dashboard = () => {
     const completed = tasks.filter(t => t.status === 'completed').length;
     const pending = total - completed;
     const urgent = tasks.filter(t => {
-      const h = differenceInHours(new Date(t.deadline), new Date());
+      const h = differenceInHours(new Date(`${t.date}T${t.time}`), new Date());
       return h <= 48 && h > 0 && t.status === 'pending';
     }).length;
     return { total, completed, pending, urgent };
@@ -54,10 +54,10 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Tugas" value={stats.total} icon={ListTodo} />
-        <StatCard title="Selesai" value={stats.completed} icon={CheckCircle} variant="success" />
-        <StatCard title="Belum Selesai" value={stats.pending} icon={Clock} variant="accent" />
-        <StatCard title="Deadline" value={stats.urgent} icon={AlertTriangle} variant="destructive" />
+        <StatCard title="Total Tugas" value={loading ? -1 : stats.total} icon={ListTodo} />
+        <StatCard title="Selesai" value={loading ? -1 : stats.completed} icon={CheckCircle} variant="success" />
+        <StatCard title="Belum Selesai" value={loading ? -1 : stats.pending} icon={Clock} variant="accent" />
+        <StatCard title="Deadline" value={loading ? -1 : stats.urgent} icon={AlertTriangle} variant="destructive" />
       </div>
 
       <div>

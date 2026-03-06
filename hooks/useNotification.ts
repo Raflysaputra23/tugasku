@@ -12,7 +12,7 @@ export function useNotifications(tasks: Task[]) {
     tasks
       .filter(t => t.visibility === 'private' && t.status === 'pending')
       .forEach(task => {
-        const deadline = new Date(task.deadline);
+        const deadline = new Date(`${task.date}T${task.time}`);
         const hoursLeft = differenceInHours(deadline, now);
 
         if (hoursLeft <= 12 && hoursLeft > 0) {

@@ -20,7 +20,7 @@ interface TaskCardProps {
 }
 
 const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTake, onView }: TaskCardProps) => {
-  const deadline = new Date(task.deadline);
+  const deadline = new Date(`${task.date}T${task.time}`);
   const hoursUntil = differenceInHours(deadline, new Date());
   const isOverdue = isPast(deadline) && task.status === 'pending';
   const isUrgent = hoursUntil <= 24 && hoursUntil > 0 && task.status === 'pending';
@@ -41,7 +41,7 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
           <div className="min-w-0 flex-1">
             <h3 className="font-display font-semibold text-lg truncate mb-2">{task.title}</h3>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <Badge variant={task.status === 'completed' ? 'default' : 'secondary'} className="text-xs ">
+              <Badge variant={task.status === 'completed' ? 'success' : 'destructive' } className="text-xs ">
                 {task.status === 'completed' ? 'Selesai' : 'Belum Selesai'}
               </Badge>
               <Badge variant="outline" className="text-xs">
@@ -65,10 +65,10 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
               </span>
             </div>
             {task.description && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{task.description}</p>
+              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{`${task.description}`}</p>
             )}
-            {task.author_name && !isOwner && (
-              <p className="text-xs text-muted-foreground mt-2">oleh {task.author_name}</p>
+            {task?.profiles && !isOwner && (
+              <p className="text-xs mt-2 p-2 bg-accent/10 border border-accent inline-block rounded-lg text-accent">Created by <span className='font-semibold'>{task.profiles.nama_lengkap}</span></p>
             )}
           </div>
           <DropdownMenu>

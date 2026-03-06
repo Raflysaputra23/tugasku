@@ -12,14 +12,15 @@ import StatCard from '@/components/dashboard/StatCard';
 import { useTasks } from '@/hooks/useTasks';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import LoadingPage from '@/components/LoadingPage';
 
 const Profile = () => {
-  const { user, profile, updateProfile } = useAuth();
-  const { tasks } = useTasks();
-  const [fullName, setFullName] = useState(profile?.nama_lengkap || '');
-  const [major, setMajor] = useState(profile?.jurusan || '');
-  const [className, setClassName] = useState(profile?.kelas || '');
-  const [bio, setBio] = useState(profile?.bio || '');
+  const { user, profile, updateProfile, loading } = useAuth();
+  const { tasks, loading: tasksLoading } = useTasks();
+  const [fullName, setFullName] = useState('');
+  const [major, setMajor] = useState('');
+  const [className, setClassName] = useState('');
+  const [bio, setBio] = useState('');
   const [disableSave, setDisableSave] = useState(true);
 
   const stats = useMemo(() => {
@@ -44,9 +45,22 @@ const Profile = () => {
     })()
   }, [fullName, major, className, bio]);
 
+  useEffect(() => {
+    (async() => {
+      if(user) {
+        setFullName(profile?.nama_lengkap || '');
+        setMajor(profile?.jurusan || '');
+        setClassName(profile?.kelas || '');
+        setBio(profile?.bio || '');
+      }
+    })()
+  }, [user]);
+
   const initials = fullName
     ? fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
     : user?.email?.[0]?.toUpperCase() || 'U';
+
+  if(loading) return <LoadingPage />;
 
   return (
     <div className="space-y-6 w-full">
@@ -56,9 +70,9 @@ const Profile = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard title="Tugas Privat" value={stats.privateTasks} icon={ListTodo} />
-        <StatCard title="Tugas Publik" value={stats.publicTasks} icon={Globe} variant="accent" />
-        <StatCard title="Tugas Diambil" value={stats.takenTasks} icon={Copy} variant="success" />
+        <StatCard title="Tugas Privat" value={tasksLoading ? -1 : stats.privateTasks} icon={ListTodo} />
+        <StatCard title="Tugas Publik" value={tasksLoading ? -1 : stats.publicTasks} icon={Globe} variant="accent" />
+        <StatCard title="Tugas Diambil" value={tasksLoading ? -1 : stats.takenTasks} icon={Copy} variant="success" />
       </div>
 
       <Card className='animate-[fade-in_0.7s_ease-in-out]'>

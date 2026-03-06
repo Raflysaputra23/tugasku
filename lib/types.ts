@@ -5,7 +5,9 @@ export interface Task {
   title: string;
   description: string;
   class_name: string;
-  deadline: string;
+  profiles?: { nama_lengkap: string };
+  date: string;
+  time: string;
   status: 'pending' | 'completed';
   visibility: 'private' | 'public';
   file_url?: string;

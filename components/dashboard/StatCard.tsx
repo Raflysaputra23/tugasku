@@ -25,7 +25,9 @@ const StatCard = ({ title, value, icon: Icon, description, variant = 'default' }
       </div>
       <div className="min-w-0">
         <p className="text-sm text-muted-foreground truncate">{title}</p>
-        <p className="text-2xl font-display font-bold">{value}</p>
+        {value == -1 ? <div className="flex justify-start h-8 py-1">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
+        </div> : <p className="text-2xl font-display font-bold">{value}</p>}
         {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
     </CardContent>

@@ -36,7 +36,7 @@ const TugasPrivate = () => {
         }
 
         result.sort((a, b) => {
-            if (sortBy === 'deadline') return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+            if (sortBy === 'deadline') return new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime();
             return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
         });
 

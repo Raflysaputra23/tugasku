@@ -1,19 +1,19 @@
 import { Task } from '@/lib/types';
-import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 import { createClient } from '@/lib/supabase/client';
+import { toastError, toastSuccess } from '@/lib/toast';
 
 const supabase = createClient();
 
 const fetchTasks = async (id_user?: string): Promise<Task[]> => {
   try {
     if (id_user) {
-      const { error, data } = await supabase.from('tasks').select('*').eq('id_user', id_user).order('created_at', { ascending: false });
+      const { error, data } = await supabase.from('tasks').select('*, profiles(nama_lengkap)').eq('id_user', id_user).order('created_at', { ascending: false });
       if (error) throw error;
       return data ? data : [];
     } else {
-      const { error, data } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+      const { error, data } = await supabase.from('tasks').select('*, profiles(nama_lengkap)').order('created_at', { ascending: false });
       if (error) throw error;
       return data ? data : [];
     }
@@ -22,20 +22,23 @@ const fetchTasks = async (id_user?: string): Promise<Task[]> => {
 
 const saveTasks = async (tasks: Task) => {
   const { error } = await supabase.from('tasks').insert(tasks);
+  console.log(error);
   if (error) throw error;
 };
 
 export function useTasks() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      await getTask();
-      setLoading(false);
+      if(user) {
+        await getTask();
+        setLoading(false);
+      }
     })()
-  }, []);
+  }, [user, authLoading]);
 
 
   const getTask = async () => {
@@ -44,7 +47,7 @@ export function useTasks() {
   };
 
   const createTask = async (data: Partial<Task>) => {
-    if (!user) return;
+    if (!user) throw new Error('Not authenticated');
     setLoading(true);
     const newTask: Task = {
       id_task: crypto.randomUUID(),
@@ -53,19 +56,21 @@ export function useTasks() {
       title: data.title || '',
       description: data.description || '',
       class_name: data.class_name || '',
-      deadline: data.deadline || new Date().toISOString(),
+      date: data.date || new Date().toISOString().split('T')[0],
+      time: data.time || new Date().toISOString().split('T')[1],
       status: 'pending',
       visibility: data.visibility || 'private',
       file_url: data.file_url,
       file_name: data.file_name,
-      source_task_id: data.source_task_id
+      source_task_id: data.source_task_id || ''
     };
 
     try {
       await saveTasks(newTask);
       await getTask();
-      toast.success('Tugas berhasil dibuat!');
+      toastSuccess('Tugas berhasil ditambahkan!');
     } catch (error) {
+      toastError('Tugas gagal ditambahkan!');
       console.log(error)
     } finally {
       setLoading(false);
@@ -77,8 +82,9 @@ export function useTasks() {
       const { error } = await supabase.from('tasks').update(data).eq('id_task', id);
       if (error) throw error;
       await getTask();
-      toast.success('Tugas berhasil diperbarui!');
+      toastSuccess('Tugas berhasil diubah!');
     } catch (error) {
+      toastError('Tugas gagal diubah!');
       console.log(error);
     }
   };
@@ -88,9 +94,10 @@ export function useTasks() {
       setLoading(true);
       const { error } = await supabase.from('tasks').delete().eq('id_task', id);
       if (error) throw error;
+      toastSuccess('Tugas berhasil dihapus!');
       await getTask();
-      toast.success('Tugas berhasil dihapus!');
     } catch (error) {
+      toastError('Tugas gagal dihapus!');
       console.log(error)
     } finally {
       setLoading(false);
@@ -105,16 +112,19 @@ export function useTasks() {
 }
 
 export function usePublicTasks() {
+  const { user, loading: authLoading } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const tasks = await fetchTasks();
-      setTasks(tasks.filter(t => t.visibility === 'public'));
+      const tasksPublic = await fetchTasks();
+      const tasksPrivate = await fetchTasks(user?.id);
+      const source_task = tasksPrivate.map(t => t.source_task_id || '');
+      setTasks(tasksPublic.filter(t => t.visibility === 'public' && source_task.includes(t.id_task) === false));
       setLoading(false);
     })()
-  }, []);
+  }, [user, authLoading]);
 
   return { tasks, loading };
 }

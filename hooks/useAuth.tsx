@@ -6,8 +6,7 @@ import { User, Session } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 
 interface Profile {
-    id: string;
-    user_id: string;
+    id_user: string;
     nama_lengkap: string | null;
     avatar_url: string | null;
     jurusan: string | null;
@@ -15,6 +14,7 @@ interface Profile {
     bio: string | null;
     role: string | null;
     email: string | null;
+    created_at: string | null;
 }
 
 interface AuthContextType {
@@ -40,12 +40,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     const fetchProfile = async (userId: string) => {
-        const { data } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id_user", userId)
-            .single();
-        setProfile(data as Profile | null);
+        if(userId) {
+            const { data } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id_user", userId)
+                .single();
+            setProfile(data as Profile | null);
+        } else {
+            setProfile(null);
+        }
     };
 
 
