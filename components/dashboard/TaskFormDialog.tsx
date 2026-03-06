@@ -47,7 +47,7 @@ const TaskFormDialog = ({ open, onOpenChange, task, onSubmit }: TaskFormDialogPr
     e.preventDefault();
     setLoading(true);
     try {
-      await onSubmit({ ...form, time: form.deadline.split('T')[1], date: form.deadline.split('T')[0] });
+      await onSubmit({ subject: form.subject, title: form.title, description: form.description, class_name: form.class_name, visibility: form.visibility, time: form.deadline.split('T')[1], date: form.deadline.split('T')[0] });
       onOpenChange(false);
     } finally {
       setLoading(false);
