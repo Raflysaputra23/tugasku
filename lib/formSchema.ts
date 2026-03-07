@@ -22,17 +22,17 @@ export const formJadwalSchema = z.object({
 export const formJadwalMasukSchema = z.object({
     id_jadwal: z.string().min(1, "ID Jadwal harus diisi!"),
     mata_kuliah: z.string().min(1, "Panjang mata kuliah minimal 1 digit!"),
-    hari: z.string().min(1, "Panjang hari minimal 1 digit!"),
+    hari: z.string().min(1, "Hari harus diisi!"),
     ruangan: z.optional(z.string().min(2, "Panjang ruangan minimal 2 digit!")),
-    dosen: z.optional(z.string().min(2, "Panjang dosen minimal 2 digit!")),
+    dosen: z.optional(z.string().min(2, "Panjang nama dosen minimal 2 digit!")),
     start_time: z.string().min(1, "Start time harus diisi!"),
     end_time: z.string().min(1, "End time harus diisi!")
 })
 
 export const formTugasSchema = z.object({
-    subject: z.string().min(2, "Panjang subject minimal 2 digit!"),
-    title: z.string().min(2, "Panjang title minimal 2 digit!"),
-    description: z.string().min(4, "Panjang description minimal 4 digit!"),
+    subject: z.string().min(2, "Panjang mata kuliah minimal 2 digit!"),
+    title: z.string().min(2, "Panjang judul minimal 2 digit!"),
+    description: z.string().min(4, "Panjang deskripsi minimal 4 digit!"),
     class_name: z.string().min(1, "Kelas harus diisi!"),
-    deadline: z.string().min(1, "Date harus diisi!"),
+    deadline: z.string().min(1, "Waktu dedline harus diisi!"),
 });

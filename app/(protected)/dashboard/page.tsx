@@ -4,15 +4,18 @@ import { useMemo, useState } from 'react';
 import { ListTodo, CheckCircle, Clock, AlertTriangle, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTasks } from '@/hooks/useTasks';
+
 import { Task } from '@/lib/types';
 import { differenceInHours } from 'date-fns';
 import StatCard from '@/components/dashboard/StatCard';
 import EmptyState from '@/components/dashboard/EmptyState';
 import TaskCard from '@/components/dashboard/TaskCard';
 import TaskFormDialog from '@/components/dashboard/TaskFormDialog';
+import { useNotificationBrowser } from '@/hooks/useNotificationBrowser';
 
 const Dashboard = () => {
   const { tasks, loading, deleteTask, toggleStatus, refetch } = useTasks();
+  useNotificationBrowser(tasks);
   const [formOpen, setFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -50,7 +53,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Tugas" value={loading ? -1 : stats.total} icon={ListTodo} />
+        <StatCard title="Total Tugas" value={loading ? -1 : stats.total} icon={ListTodo} variant='blue' />
         <StatCard title="Selesai" value={loading ? -1 : stats.completed} icon={CheckCircle} variant="success" />
         <StatCard title="Belum Selesai" value={loading ? -1 : stats.pending} icon={Clock} variant="accent" />
         <StatCard title="Deadline" value={loading ? -1 : stats.urgent} icon={AlertTriangle} variant="destructive" />

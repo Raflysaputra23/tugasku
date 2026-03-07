@@ -12,7 +12,7 @@ import { useTasks } from '@/hooks/useTasks';
 import { Task } from '@/lib/types';
 
 const TugasPrivate = () => {
-    const { tasks, loading, createTask, updateTask, deleteTask, toggleStatus } = useTasks();
+    const { tasks, loading, refetch, deleteTask, toggleStatus } = useTasks();
     const [formOpen, setFormOpen] = useState(false);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [search, setSearch] = useState('');
@@ -39,16 +39,12 @@ const TugasPrivate = () => {
             if (sortBy === 'deadline') return new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime();
             return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
         });
-
+        
         return result;
     }, [tasks, search, statusFilter, sortBy]);
 
-    const handleSubmit = async (data: Partial<Task>) => {
-        if (editingTask) {
-            await updateTask(editingTask.id_task, data);
-        } else {
-            await createTask(data);
-        }
+    const resetOpenForm = () => {
+        setFormOpen(false);
         setEditingTask(null);
     };
 
@@ -89,8 +85,8 @@ const TugasPrivate = () => {
             </div>
 
             {loading ? (
-                <div className="flex justify-center py-8">
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                <div className="flex justify-center py-16">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                 </div>
             ) : filtered.length === 0 ? (
                 <EmptyState
@@ -118,7 +114,8 @@ const TugasPrivate = () => {
                 open={formOpen}
                 onOpenChange={setFormOpen}
                 task={editingTask}
-                onSubmit={handleSubmit}
+                refetch={refetch}
+                resetOpenForm={resetOpenForm}
             />
         </div>
     );

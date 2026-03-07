@@ -9,8 +9,6 @@ import {
   formTugasSchema,
 } from "./formSchema";
 import { createClient } from "./supabase/server";
-import { toastError, toastSuccess } from "./toast";
-import { redirect } from "next/navigation";
 
 export const formLoginValidation = async (
   prev: unknown,
@@ -228,34 +226,46 @@ export const formTugasValidation = async (
     };
   }
 
-  const { subject, title, class_name, description, deadline } = validasi.data
+  const { subject, title, class_name, description, deadline } = validasi.data;
+
+  const tasks = {
+    subject,
+    title,
+    class_name,
+    description,
+    date: deadline.split("T")[0],
+    time: deadline.split("T")[1],
+    visibility: data.visibility || "private",
+    file_url: data.file_url || "",
+    file_name: data.file_name || "",
+  };
 
   try {
-    const { error } = await supabase.from('tasks').insert({
-      id_task: crypto.randomUUID(),
-      id_user: user?.id,
-      subject,
-      title,
-      class_name,
-      date: deadline.split('T')[0],
-      time: deadline.split('T')[1],
-      description,
-      status: 'pending',
-      visibility: data.visibility || 'private',
-      file_url: data.file_url || '',
-      file_name: data.file_name || ''
-    });
+    if (data?.id_task) {
+      const { error } = await supabase
+        .from("tasks")
+        .update(tasks)
+        .eq("id_task", data.id_task);
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.from("tasks").insert({
+        id_task: crypto.randomUUID(),
+        id_user: user?.id,
+        status: "pending",
+        ...tasks,
+      });
+      if (error) throw error;
+    }
 
-    if(error) throw error;
     return {
       message: "Tugas berhasil ditambahkan",
-      success: true
-    }
-  } catch(error) {
-    console.log(error)
+      success: true,
+    };
+  } catch (error) {
+    console.log(error);
     return {
       message: "Tugas gagal ditambahkan!",
-      success: false
-    }
+      success: false,
+    };
   }
 };

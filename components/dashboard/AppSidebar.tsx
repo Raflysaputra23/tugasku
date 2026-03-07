@@ -3,6 +3,7 @@
 import {
   LayoutDashboard, ListTodo, Globe, User, Bell, LogOut, Sun, Moon, BookOpen,
   CalendarDays,
+  Shield,
 } from 'lucide-react';
 
 import {
@@ -17,6 +18,7 @@ import { useEffect, useState } from 'react';
 import LoadingPage from '../LoadingPage';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
+import { useAdmin } from '@/hooks/useAdmin';
 
 const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
@@ -34,6 +36,7 @@ const AppSidebar = () => {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const { signOut, user } = useAuth();
+  const { isAdmin } = useAdmin();
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -99,13 +102,23 @@ const AppSidebar = () => {
                 {accountItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url} className={`${isActive(item.url) && 'bg-accent/20 border border-accent text-accent'} hover:!bg-accent/20 hover:border hover:border-accent hover:!text-accent hover:p-4 hover:py-5 py-5`}>
+                      <Link href={item.url} className={`${isActive(item.url) && 'bg-accent/20 border border-accent text-accent'} hover:bg-accent/20! hover:border hover:border-accent hover:text-accent! hover:p-4 hover:py-5 py-5`}>
                         <item.icon className="mr-2 h-4 w-4" />
                         {!collapsed && <span>{item.title}</span>}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
+                {isAdmin && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive('/admin')}>
+                      <Link href="/admin" className={`${isActive('/admin') && 'bg-accent/20! border border-accent text-accent!'} hover:bg-accent/20! hover:border hover:border-accent hover:text-accent! hover:p-4 hover:py-5 py-5`}>
+                        <Shield className="mr-2 h-4 w-4" />
+                        {!collapsed && <span>Admin</span>}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

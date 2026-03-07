@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Task } from '@/lib/types';
-import { Loader2 } from 'lucide-react';
 import { formTugasValidation } from '@/lib/formValidation';
 import { toastError, toastSuccess } from '@/lib/toast';
 import ButtonForm from '../auth/ButtonForm';
@@ -68,6 +67,7 @@ const TaskFormDialog = ({ open, onOpenChange, task, refetch, resetOpenForm }: Ta
         </DialogHeader>
         <form action={formAction}>
           <div className="grid grid-cols-2 gap-4">
+            <input type="hidden" name="id_task" defaultValue={task ? task.id_task : ''} />
             <div className="space-y-2 py-3 relative">
               <Label>Mata Kuliah</Label>
               <Input value={form.subject} name='subject' onChange={e => setForm(f => ({ ...f, subject: e.target.value }))} required placeholder="Contoh: Algoritma" />
@@ -79,18 +79,18 @@ const TaskFormDialog = ({ open, onOpenChange, task, refetch, resetOpenForm }: Ta
               <p className='absolute bottom-0.5 left-0.5 text-xs text-destructive'>{state && state.error?.class_name}</p>
             </div>
           </div>
-          <div className="space-y-2 py-3 relative">
+          <div className="space-y-2 pb-3 py-2 relative">
             <Label>Judul Tugas</Label>
             <Input value={form.title} name='title' onChange={e => setForm(f => ({ ...f, title: e.target.value }))} required placeholder="Judul tugas..." />
             <p className='absolute bottom-0.5 left-0.5 text-xs text-destructive'>{state && state.error?.title}</p>
 
           </div>
-          <div className="space-y-2 py-3 relative">
+          <div className="space-y-2 pb-3 py-2 relative">
             <Label>Deskripsi</Label>
-            <Textarea value={form.description} name='description' onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Deskripsi tugas..." rows={3} />
+            <Textarea value={form.description} name='description' className='resize-none break-all' onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Deskripsi tugas..." rows={3} />
             <p className='absolute bottom-0.5 left-0.5 text-xs text-destructive'>{state && state.error?.description}</p>
           </div>
-          <div className="space-y-2 py-3 relative">
+          <div className="space-y-2 pb-3 py-2 relative">
             <Label>Deadline</Label>
             <Input type="datetime-local" value={form.deadline} name='deadline' onChange={e => setForm(f => ({ ...f, deadline: e.target.value }))} required />
             <p className='absolute bottom-0.5 left-0.5 text-xs text-destructive'>{state && state.error?.deadline}</p>

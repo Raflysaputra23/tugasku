@@ -6,7 +6,7 @@ interface StatCardProps {
   value: string | number;
   icon: LucideIcon;
   description?: string;
-  variant?: 'default' | 'accent' | 'success' | 'warning' | 'destructive';
+  variant?: 'default' | 'accent' | 'success' | 'warning' | 'destructive' | 'blue';
 }
 
 const variantStyles = {
@@ -14,6 +14,7 @@ const variantStyles = {
   accent: 'bg-accent/10 text-accent',
   success: 'bg-green-500/10 text-green-500',
   warning: 'bg-warning/10 text-warning',
+  blue: 'bg-blue-500/10 text-blue-500',
   destructive: 'bg-destructive/10 text-destructive',
 };
 

@@ -31,8 +31,8 @@ const Notifications = () => {
       </div>
 
       {loading ?
-        <div className="flex justify-center py-8">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="flex justify-center py-16">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
         : notifications.length === 0 ? (
           <EmptyState icon={Bell} title="Tidak ada notifikasi" description="Semua tugas pribadimu aman dari deadline yang mendesak!" />

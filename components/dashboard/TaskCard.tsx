@@ -8,6 +8,7 @@ import {
 import { Task } from '@/lib/types';
 import { format, differenceInHours, isPast } from 'date-fns';
 import { id } from 'date-fns/locale';
+import CountDown from './CountDown';
 
 interface TaskCardProps {
   task: Task;
@@ -29,7 +30,7 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
   const urgencyClass = isOverdue
     ? 'border-l-4 border-l-destructive'
     : isUrgent
-    ? 'border-l-4 border-l-warning'
+    ? 'border-l-4 border-l-amber-700'
     : isWarning
     ? 'border-l-4 border-l-accent'
     : '';
@@ -39,16 +40,17 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
       <CardContent className="px-5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="font-display font-bold text-lg truncate mb-2">{task.title}</h3>
+            <h3 className={`font-display font-bold text-lg truncate mb-2 ${isOverdue && 'line-through text-destructive'}`}>{task.title}</h3>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <Badge variant={task.status === 'completed' ? 'success' : 'destructive' } className="text-xs ">
                 {task.status === 'completed' ? 'Selesai' : 'Belum Selesai'}
               </Badge>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs bg-slate-900/20 border border-slate-700 text-slate-500">
                 {task.visibility === 'public' ? 'Publik' : 'Privat'}
               </Badge>
               {isOverdue && <Badge variant="destructive" className="text-xs">Terlambat</Badge>}
-              {isUrgent && <Badge className="text-xs bg-warning text-warning-foreground">Mendesak</Badge>}
+              {isUrgent && <Badge className="text-xs bg-warning text-warning-foreground bg-amber-700/20 border border-amber-700 text-amber-700">Mendesak</Badge>}
+              <CountDown deadline={`${task.date}T${task.time}`} status={task.status} />
             </div>
             <div className="flex items-center gap-3 mt-2 text-xs text-foreground flex-wrap">
               <span className="flex items-center gap-1">

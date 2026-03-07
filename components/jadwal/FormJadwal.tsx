@@ -26,7 +26,7 @@ const FormJadwal = ({ createOpen, setCreateOpen, refetch }: { createOpen: boolea
     return (
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
-                <Button variant={'primary'}><Plus className="mr-2 h-4 w-4" /> Buat Jadwal</Button>
+                <Button variant={'primary'}><Plus className="mr-1 h-4 w-4" /> Buat Jadwal</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
