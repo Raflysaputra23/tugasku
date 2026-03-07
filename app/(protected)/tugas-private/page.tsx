@@ -39,7 +39,7 @@ const TugasPrivate = () => {
             if (sortBy === 'deadline') return new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime();
             return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
         });
-        
+
         return result;
     }, [tasks, search, statusFilter, sortBy]);
 
@@ -56,7 +56,7 @@ const TugasPrivate = () => {
                     <p className="text-sm text-muted-foreground">{tasks.length} tugas</p>
                 </div>
                 <Button variant={'primary'} onClick={() => { setEditingTask(null); setFormOpen(true); }}>
-                    <Plus className="mr-2 h-4 w-4" /> Buat Tugas
+                    <Plus className="mr-1 h-4 w-4" /> Buat Tugas
                 </Button>
             </div>
 

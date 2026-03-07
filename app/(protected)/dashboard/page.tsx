@@ -48,7 +48,7 @@ const Dashboard = () => {
           <p className="text-sm text-muted-foreground">Ringkasan tugas kuliahmu</p>
         </div>
         <Button variant={'primary'} className='cursor-pointer' onClick={() => { setEditingTask(null); setFormOpen(true); }}>
-          <Plus className="mr-2 h-4 w-4" /> Buat Tugas
+          <Plus className="mr-1 h-4 w-4" /> Buat Tugas
         </Button>
       </div>
 

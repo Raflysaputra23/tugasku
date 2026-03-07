@@ -37,7 +37,7 @@ export async function updateSession(request: NextRequest) {
   
   
   const isLogin = ["/login", "/register","/verifikasi-email"].includes(request.nextUrl.pathname);
-  const isLogout = ["/dashboard","/profile","/tugas-private","/tugas-public","/notifikasi"].includes(request.nextUrl.pathname);
+  const isLogout = ["/dashboard","/profile","/tugas-private","/tugas-public","/notifikasi","/jadwal","/admin"].includes(request.nextUrl.pathname);
 
   if (isLogout && !user) {
     const url = request.nextUrl.clone();

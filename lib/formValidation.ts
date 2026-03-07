@@ -235,7 +235,7 @@ export const formTugasValidation = async (
     description,
     date: deadline.split("T")[0],
     time: deadline.split("T")[1],
-    visibility: data.visibility || "private",
+    visibility: data.visibility ? "public" : "private",
     file_url: data.file_url || "",
     file_name: data.file_name || "",
   };

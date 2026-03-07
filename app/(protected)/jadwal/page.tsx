@@ -83,7 +83,7 @@ const Schedules = () => {
                       </CardTitle>
                       <div className="flex items-center gap-2">
                         <Button size="sm" variant="primaryOutliner" className='cursor-pointer' onClick={() => openAddEntry(schedule.id_jadwal)}>
-                          <Plus className="mr-1 h-3 w-3" /> Tambah
+                          <Plus className="lg:mr-1 h-3 w-3" /> <span className='hidden lg:inline-block'>Tambah</span>
                         </Button>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
