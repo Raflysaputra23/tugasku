@@ -12,7 +12,7 @@ import TaskCard from '@/components/dashboard/TaskCard';
 import TaskFormDialog from '@/components/dashboard/TaskFormDialog';
 
 const Dashboard = () => {
-  const { tasks, loading, createTask, updateTask, deleteTask, toggleStatus } = useTasks();
+  const { tasks, loading, deleteTask, toggleStatus, refetch } = useTasks();
   const [formOpen, setFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -32,12 +32,8 @@ const Dashboard = () => {
     [tasks]
   );
 
-  const handleSubmit = async (data: Partial<Task>) => {
-    if (editingTask) {
-      await updateTask(editingTask.id_task, data);
-    } else {
-      await createTask(data);
-    }
+  const resetOpenForm = async () => {
+    setFormOpen(false);
     setEditingTask(null);
   };
 
@@ -92,8 +88,9 @@ const Dashboard = () => {
       <TaskFormDialog
         open={formOpen}
         onOpenChange={setFormOpen}
+        resetOpenForm={resetOpenForm}
         task={editingTask}
-        onSubmit={handleSubmit}
+        refetch={refetch}
       />
     </div>
   );

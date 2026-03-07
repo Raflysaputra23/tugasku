@@ -39,7 +39,7 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
       <CardContent className="px-5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="font-display font-semibold text-lg truncate mb-2">{task.title}</h3>
+            <h3 className="font-display font-bold text-lg truncate mb-2">{task.title}</h3>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <Badge variant={task.status === 'completed' ? 'success' : 'destructive' } className="text-xs ">
                 {task.status === 'completed' ? 'Selesai' : 'Belum Selesai'}
@@ -50,17 +50,17 @@ const TaskCard = ({ task, isOwner = true, onEdit, onDelete, onToggleStatus, onTa
               {isOverdue && <Badge variant="destructive" className="text-xs">Terlambat</Badge>}
               {isUrgent && <Badge className="text-xs bg-warning text-warning-foreground">Mendesak</Badge>}
             </div>
-            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground flex-wrap">
+            <div className="flex items-center gap-3 mt-2 text-xs text-foreground flex-wrap">
               <span className="flex items-center gap-1">
-                <BookOpen className="h-3 w-3" />
+                <BookOpen className="h-3 w-3 text-accent" />
                 {task.subject}
               </span>
               <span className="flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
+                <Calendar className="h-3 w-3 text-blue-500" />
                 {format(deadline, 'dd MMM yyyy', { locale: id })}
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
+                <Clock className="h-3 w-3 text-primary" />
                 {format(deadline, 'HH:mm')}
               </span>
             </div>

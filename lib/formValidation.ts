@@ -1,8 +1,16 @@
 "use server";
 
 import { AuthError } from "@supabase/supabase-js";
-import { formLoginSchema, formRegisterSchema } from "./formSchema";
+import {
+  formJadwalMasukSchema,
+  formJadwalSchema,
+  formLoginSchema,
+  formRegisterSchema,
+  formTugasSchema,
+} from "./formSchema";
 import { createClient } from "./supabase/server";
+import { toastError, toastSuccess } from "./toast";
+import { redirect } from "next/navigation";
 
 export const formLoginValidation = async (
   prev: unknown,
@@ -86,7 +94,7 @@ export const formRegisterValidation = async (
       id_user: data?.user?.id,
       nama_lengkap: namaLengkap,
       email,
-      role: "user"
+      role: "user",
     });
 
     if (error2) throw error2;
@@ -110,6 +118,144 @@ export const formRegisterValidation = async (
         message: "Ada kesalahan sistem!",
         success: false,
       };
+    }
+  }
+};
+
+export const formJadwalValidation = async (
+  prev: unknown,
+  formdata: FormData,
+) => {
+  const supabase = await createClient();
+  const { data: dataUser } = await supabase.auth.getClaims();
+  const user = dataUser?.claims;
+
+  const data = Object.fromEntries(formdata.entries());
+  const validasi = formJadwalSchema.safeParse(data);
+
+  if (!validasi.success) {
+    return {
+      error: validasi.error.flatten().fieldErrors,
+      message: "Data tidak valid!",
+      success: false,
+    };
+  }
+
+  const { judul } = validasi.data;
+  try {
+    const { error } = await supabase.from("jadwal").insert({
+      id_user: user?.id,
+      title: judul,
+    });
+
+    if (error) throw error;
+    return {
+      message: "Jadwal berhasil dibuat!",
+      success: true,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "Jadwal gagal dibuat!",
+      success: false,
+    };
+  }
+};
+
+export const formJadwalMasukValidation = async (
+  prev: unknown,
+  formdata: FormData,
+) => {
+  const supabase = await createClient();
+  const { data: dataUser } = await supabase.auth.getClaims();
+  const user = dataUser?.claims;
+
+  const data = Object.fromEntries(formdata.entries());
+  const validasi = formJadwalMasukSchema.safeParse(data);
+
+  if (!validasi.success) {
+    return {
+      error: validasi.error.flatten().fieldErrors,
+      message: "Data tidak valid!",
+      success: false,
+    };
+  }
+  const { id_jadwal, mata_kuliah, hari, ruangan, dosen, start_time, end_time } =
+    validasi.data;
+
+  try {
+    const { error } = await supabase.from("jadwal_masuk").insert({
+      id_jadwal,
+      id_user: user?.id,
+      mata_kuliah,
+      hari,
+      start_time,
+      end_time,
+      ruangan,
+      dosen,
+    });
+    if (error) throw error;
+
+    return {
+      message: "Jadwal berhasil ditambahkan!",
+      success: true,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "Jadwal gagal ditambahkan!",
+      success: true,
+    };
+  }
+};
+
+export const formTugasValidation = async (
+  prev: unknown,
+  formdata: FormData,
+) => {
+  const supabase = await createClient();
+  const { data: dataUser } = await supabase.auth.getClaims();
+  const user = dataUser?.claims;
+
+  const data = Object.fromEntries(formdata.entries());
+  const validasi = formTugasSchema.safeParse(data);
+
+  if (!validasi.success) {
+    return {
+      error: validasi.error.flatten().fieldErrors,
+      message: "Data tidak valid!",
+      success: false,
+    };
+  }
+
+  const { subject, title, class_name, description, deadline } = validasi.data
+
+  try {
+    const { error } = await supabase.from('tasks').insert({
+      id_task: crypto.randomUUID(),
+      id_user: user?.id,
+      subject,
+      title,
+      class_name,
+      date: deadline.split('T')[0],
+      time: deadline.split('T')[1],
+      description,
+      status: 'pending',
+      visibility: data.visibility || 'private',
+      file_url: data.file_url || '',
+      file_name: data.file_name || ''
+    });
+
+    if(error) throw error;
+    return {
+      message: "Tugas berhasil ditambahkan",
+      success: true
+    }
+  } catch(error) {
+    console.log(error)
+    return {
+      message: "Tugas gagal ditambahkan!",
+      success: false
     }
   }
 };

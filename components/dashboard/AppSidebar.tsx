@@ -2,6 +2,7 @@
 
 import {
   LayoutDashboard, ListTodo, Globe, User, Bell, LogOut, Sun, Moon, BookOpen,
+  CalendarDays,
 } from 'lucide-react';
 
 import {
@@ -21,6 +22,7 @@ const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Tugas Saya', url: '/tugas-private', icon: ListTodo },
   { title: 'Tugas Publik', url: '/tugas-public', icon: Globe },
+  { title: 'Jadwal', url: '/jadwal', icon: CalendarDays },
   { title: 'Notifikasi', url: '/notifikasi', icon: Bell },
 ];
 

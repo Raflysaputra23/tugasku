@@ -60,8 +60,8 @@ export function useTasks() {
       time: data.time || new Date().toISOString().split('T')[1],
       status: 'pending',
       visibility: data.visibility || 'private',
-      file_url: data.file_url,
-      file_name: data.file_name,
+      file_url: data.file_url || '',
+      file_name: data.file_name || '',
       source_task_id: data.source_task_id || ''
     };
 
@@ -108,7 +108,7 @@ export function useTasks() {
     await updateTask(task.id_task, { status: task.status === 'completed' ? 'pending' : 'completed' });
   };
 
-  return { tasks, loading, createTask, updateTask, deleteTask, toggleStatus, refetch: fetchTasks };
+  return { tasks, loading, createTask, updateTask, deleteTask, toggleStatus, refetch: getTask };
 }
 
 export function usePublicTasks() {

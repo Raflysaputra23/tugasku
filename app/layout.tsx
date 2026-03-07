@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: "Tugasku",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_URL_DOMAIN}/tugasku-logo.png`,
+        url: `${process.env.NEXT_PUBLIC_URL_DOMAIN}/tugasku_logo.png`,
         width: 1200,
         height: 630,
         alt: "Tugasku Task Manager App Preview",

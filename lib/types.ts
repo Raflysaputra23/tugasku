@@ -39,3 +39,26 @@ export interface Notification {
   read: boolean;
   created_at: string;
 }
+
+export interface Schedule {
+  id_jadwal: string;
+  user_id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  entries?: ScheduleEntry[];
+}
+
+export interface ScheduleEntry {
+  id_jadwal_masuk: string;
+  id_jadwal: string;
+  id_user: string;
+  mata_kuliah: string;
+  hari: number; // 0=Senin, 6=Minggu
+  start_time: string;  // HH:mm
+  end_time: string;
+  ruangan?: string;
+  dosen?: string;
+  created_at: string;
+}
+
